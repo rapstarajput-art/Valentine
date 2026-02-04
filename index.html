@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine 💖</title>
+
+<style>
+body{
+  margin:0;
+  background:#ffd6e8;
+  font-family:Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.hidden{display:none;}
+
+.card{
+  background:white;
+  width:90%;
+  max-width:380px;
+  padding:25px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  position:relative;
+}
+
+h1,h2{margin:15px 0;}
+
+button{
+  padding:12px 22px;
+  font-size:16px;
+  border:none;
+  border-radius:25px;
+  margin:10px;
+}
+
+#yes{
+  background:#ff4d88;
+  color:white;
+}
+
+#no{
+  background:#f2f2f2;
+  position:absolute;
+}
+
+img{
+  width:200px;
+  max-width:100%;
+  border-radius:10px;
+}
+
+/* ❤️ Heart shape */
+#heart{
+  position:absolute;
+  top:55%;
+  left:40%;
+  width:40px;
+  height:40px;
+  background:red;
+  transform:rotate(-45deg);
+  cursor:pointer;
+  transition:transform 0.6s ease;
+}
+
+#heart::before,
+#heart::after{
+  content:"";
+  position:absolute;
+  width:40px;
+  height:40px;
+  background:red;
+  border-radius:50%;
+}
+
+#heart::before{ top:-20px; left:0; }
+#heart::after{ left:20px; top:0; }
+
+#heart span{
+  position:absolute;
+  top:10px;
+  left:8px;
+  transform:rotate(45deg);
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+}
+
+/* 💥 Explosion */
+.firework{
+  position:fixed;
+  width:8px;
+  height:8px;
+  background:gold;
+  border-radius:50%;
+  animation:boom 1.2s ease-out forwards;
+}
+
+@keyframes boom{
+  to{
+    transform:translate(
+      calc(-200px + 400px * var(--x)),
+      calc(-200px + 400px * var(--y))
+    );
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="card" id="page1">
+  <div style="font-size:50px;">🐱</div>
+  <h1>Tanisha, will you be my Valentine? 💖</h1>
+  <button id="yes" onclick="yesClick()">Yes 💕</button>
+  <button id="no" onclick="noClick()">No</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="card hidden" id="page2">
+  <h2>Thank you, Tanisha, for being my Valentine 💖</h2>
+  <div style="position:relative;">
+    <img src="me.png">
+    <div id="heart" onclick="heartClick()"><span>click</span></div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="card hidden" id="page3">
+  <img src="her.png">
+  <h2>My Valentine, My Love 💖💖</h2>
+</div>
+
+<script>
+/* ❌ NO button */
+let texts=[
+"No","Ahhh Nooooo","You Bitch","Boo Boo","B U B U",
+"Tum no pyar karti ho humse","Yes 💖"
+];
+let i=0;
+
+function move(el){
+  el.style.left=Math.random()*(260)+"px";
+  el.style.top=Math.random()*(260)+"px";
+}
+
+function noClick(){
+  let no=document.getElementById("no");
+  no.innerText=texts[i];
+  move(no);
+  if(texts[i].includes("Yes")){
+    no.style.background="#ff4d88";
+    no.onclick=yesClick;
+  }
+  i++;
+}
+
+/* ✅ YES */
+function yesClick(){
+  page1.classList.add("hidden");
+  page2.classList.remove("hidden");
+}
+
+/* ❤️ HEART LOGIC */
+let clicks=0;
+function heartClick(){
+  let heart=document.getElementById("heart");
+  clicks++;
+
+  if(navigator.vibrate) navigator.vibrate(100*clicks);
+
+  heart.style.transform=`rotate(-45deg) scale(${1+clicks*0.8})`;
+
+  if(clicks==1) heart.querySelector("span").innerText="click again";
+  if(clicks==2) heart.querySelector("span").innerText="click harder";
+
+  if(clicks>=3){
+    heart.style.transition="transform 1.5s ease";
+    heart.style.transform="rotate(-45deg) scale(25)";
+    setTimeout(()=>{
+      explode();
+      page2.classList.add("hidden");
+      page3.classList.remove("hidden");
+    },1200);
+  }
+}
+
+/* 💥 Fireworks */
+function explode(){
+  for(let j=0;j<35;j++){
+    let f=document.createElement("div");
+    f.className="firework";
+    f.style.left="50%";
+    f.style.top="50%";
+    f.style.setProperty("--x",Math.random());
+    f.style.setProperty("--y",Math.random());
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+</script>
+
+</body>
+</html>
