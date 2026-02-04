@@ -6,71 +6,86 @@
 <title>Valentine 💖</title>
 
 <style>
+/* ===== RESET ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ===== BACKGROUND ===== */
 body{
-  margin:0;
-  background:#ffd6e8;
   font-family:Arial, sans-serif;
+  min-height:100vh;
+  background:#ffd6e8;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
+  overflow:hidden;
 }
 
-.hidden{display:none;}
+/* floating hearts */
+.bg-heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:18px;
+  opacity:0.4;
+  animation:float 10s linear infinite;
+}
+@keyframes float{
+  to{transform:translateY(-110vh);opacity:0}
+}
 
+/* ===== POSTCARD ===== */
 .card{
-  background:white;
+  background:#fff;
   width:380px;
-  height:520px;              /* FIXED HEIGHT */
-  padding:25px;
+  height:520px;
   border-radius:18px;
+  padding:25px;
   text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,0.15);
-  position:absolute;         /* SAME POSITION */
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  position:absolute;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
 }
 
-h1,h2{margin:15px 0;}
+.hidden{display:none;}
+
+h1,h2{margin:15px 0}
 
 button{
   padding:12px 22px;
   font-size:16px;
   border:none;
   border-radius:25px;
-  margin:10px;
+  margin:12px;
+  cursor:pointer;
 }
 
-#yes{
-  background:#ff4d88;
-  color:white;
+#yes{background:#ff4d88;color:#fff}
+#no{background:#eee;position:absolute}
+
+/* ===== IMAGES ===== */
+.photo-wrap{
+  position:relative;
+  width:100%;
+  margin-top:10px;
+}
+.photo-wrap img{
+  width:100%;
+  border-radius:14px;
 }
 
-#no{
-  background:#f2f2f2;
-  position:absolute;
-}
-
-img{
-  width:200px;
-  max-width:100%;
-  border-radius:10px;
-}
-
-/* ❤️ Heart shape */
+/* ===== HEART ===== */
 #heart{
   position:absolute;
-  top:55%;
-  left:40%;
+  top:58%;
+  left:33%;
   width:40px;
   height:40px;
   background:red;
   transform:rotate(-45deg);
   cursor:pointer;
-  transition:transform 0.6s ease;
+  transition:transform .6s ease;
 }
-
 #heart::before,
 #heart::after{
   content:"";
@@ -80,30 +95,30 @@ img{
   background:red;
   border-radius:50%;
 }
-
-#heart::before{ top:-20px; left:0; }
-#heart::after{ left:20px; top:0; }
+#heart::before{top:-20px;left:0}
+#heart::after{left:20px;top:0}
 
 #heart span{
   position:absolute;
-  top:10px;
-  left:8px;
+  top:11px;
+  left:6px;
   transform:rotate(45deg);
-  color:white;
+  color:#fff;
   font-size:12px;
   font-weight:bold;
+  z-index:5;
+  pointer-events:none;
 }
 
-/* 💥 Explosion */
+/* ===== FIREWORKS ===== */
 .firework{
   position:fixed;
   width:8px;
   height:8px;
-  background:gold;
+  background:hotpink;
   border-radius:50%;
   animation:boom 1.2s ease-out forwards;
 }
-
 @keyframes boom{
   to{
     transform:translate(
@@ -113,91 +128,115 @@ img{
     opacity:0;
   }
 }
+
+/* ===== TEXT BEAT ===== */
+.beat{
+  animation:beat 1s infinite;
+}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
 </style>
 </head>
 
 <body>
 
+<!-- floating hearts -->
+<script>
+for(let i=0;i<20;i++){
+  let h=document.createElement("div");
+  h.className="bg-heart";
+  h.innerText="💗";
+  h.style.left=Math.random()*100+"%";
+  h.style.animationDuration=6+Math.random()*6+"s";
+  document.body.appendChild(h);
+}
+</script>
+
 <!-- PAGE 1 -->
-<div class="card" id="page1">
-  <div style="font-size:50px;">🐱</div>
+<div class="card" id="p1">
+  <div style="font-size:50px">🐱</div>
   <h1>Tanisha, will you be my Valentine? 💖</h1>
-  <button id="yes" onclick="yesClick()">Yes 💕</button>
-  <button id="no" onclick="noClick()">No</button>
+  <button id="yes">Yes 💕</button>
+  <button id="no">No</button>
 </div>
 
 <!-- PAGE 2 -->
-<div class="card hidden" id="page2">
-  <h2>Thank you, Tanisha, for being my Valentine 💖</h2>
-  <div style="position:relative;">
+<div class="card hidden" id="p2">
+  <h2>You chose love 💖</h2>
+  <div class="photo-wrap">
     <img src="me.png">
-    <div id="heart" onclick="heartClick()"><span>click</span></div>
+    <div id="heart"><span>click</span></div>
   </div>
 </div>
 
 <!-- PAGE 3 -->
-<div class="card hidden" id="page3">
-  <img src="her.png">
-  <h2>My Valentine, My Love 💖💖</h2>
+<div class="card hidden" id="p3">
+  <img src="her.png" style="width:100%;border-radius:14px">
+  <h2 class="beat">My Valentine, My Love 💖</h2>
 </div>
 
 <script>
-/* ❌ NO button */
-let texts=[
-"No","Ahhh Nooooo","You Bitch","Boo Boo","B U B U",
-"Tum no pyar karti ho humse","Yes 💖"
+/* ===== PAGE 1 ===== */
+const yes=document.getElementById("yes");
+const no=document.getElementById("no");
+const p1=document.getElementById("p1");
+const p2=document.getElementById("p2");
+const p3=document.getElementById("p3");
+
+let noTexts=[
+  "No",
+  "Ahhh nooo 😅",
+  "Really sure?",
+  "This is awkward…",
+  "No option left 😌"
 ];
-let i=0;
+let n=0;
 
-function move(el){
-  el.style.left=Math.random()*(260)+"px";
-  el.style.top=Math.random()*(260)+"px";
+function moveNo(){
+  no.style.left=Math.random()*260+"px";
+  no.style.top=Math.random()*260+"px";
 }
 
-function noClick(){
-  let no=document.getElementById("no");
-  no.innerText=texts[i];
-  move(no);
-  if(texts[i].includes("Yes")){
-    no.style.background="#ff4d88";
-    no.onclick=yesClick;
+no.onclick=()=>{
+  if(n<noTexts.length){
+    no.innerText=noTexts[n++];
+    moveNo();
+  }else{
+    no.style.display="none";
   }
-  i++;
-}
+};
 
-/* ✅ YES */
-function yesClick(){
-  page1.classList.add("hidden");
-  page2.classList.remove("hidden");
-}
+yes.onclick=()=>{
+  p1.classList.add("hidden");
+  p2.classList.remove("hidden");
+};
 
-/* ❤️ HEART LOGIC */
+/* ===== HEART ===== */
 let clicks=0;
-function heartClick(){
-  let heart=document.getElementById("heart");
+const heart=document.getElementById("heart");
+heart.onclick=()=>{
   clicks++;
+  if(navigator.vibrate) navigator.vibrate(100);
+  heart.style.transform=`rotate(-45deg) scale(${1+clicks*0.7})`;
 
-  if(navigator.vibrate) navigator.vibrate(100*clicks);
-
-  heart.style.transform=`rotate(-45deg) scale(${1+clicks*0.8})`;
-
-  if(clicks==1) heart.querySelector("span").innerText="click again";
-  if(clicks==2) heart.querySelector("span").innerText="click harder";
+  if(clicks===1) heart.querySelector("span").innerText="click again";
+  if(clicks===2) heart.querySelector("span").innerText="click harder";
 
   if(clicks>=3){
-    heart.style.transition="transform 1.5s ease";
-    heart.style.transform="rotate(-45deg) scale(25)";
+    heart.style.transform="rotate(-45deg) scale(20)";
     setTimeout(()=>{
       explode();
-      page2.classList.add("hidden");
-      page3.classList.remove("hidden");
+      p2.classList.add("hidden");
+      p3.classList.remove("hidden");
     },1200);
   }
-}
+};
 
-/* 💥 Fireworks */
+/* ===== FIREWORKS ===== */
 function explode(){
-  for(let j=0;j<35;j++){
+  for(let i=0;i<30;i++){
     let f=document.createElement("div");
     f.className="firework";
     f.style.left="50%";
