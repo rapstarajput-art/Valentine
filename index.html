@@ -6,56 +6,55 @@
 <title>Valentine 💖</title>
 
 <style>
-/* ===== RESET ===== */
-*{box-sizing:border-box;margin:0;padding:0}
+*{margin:0;padding:0;box-sizing:border-box}
 
-/* ===== BACKGROUND ===== */
 body{
-  font-family:Arial, sans-serif;
   min-height:100vh;
   background:#ffd6e8;
+  font-family:Arial, sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
   overflow:hidden;
 }
 
-/* floating hearts */
+/* 🌸 floating hearts background */
 .bg-heart{
   position:fixed;
-  bottom:-20px;
-  font-size:18px;
-  opacity:0.4;
-  animation:float 10s linear infinite;
+  bottom:-30px;
+  font-size:22px;
+  opacity:0.45;
+  animation:floatUp linear infinite;
 }
-@keyframes float{
-  to{transform:translateY(-110vh);opacity:0}
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0}
 }
 
-/* ===== POSTCARD ===== */
+/* 💌 postcard */
 .card{
-  background:#fff;
   width:380px;
   height:520px;
-  border-radius:18px;
+  background:#fff;
+  border-radius:20px;
   padding:25px;
   text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
   position:absolute;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
 }
 
-.hidden{display:none;}
+.hidden{display:none}
 
 h1,h2{margin:15px 0}
 
+/* buttons */
 button{
   padding:12px 22px;
-  font-size:16px;
   border:none;
   border-radius:25px;
+  font-size:16px;
   margin:12px;
   cursor:pointer;
 }
@@ -63,18 +62,13 @@ button{
 #yes{background:#ff4d88;color:#fff}
 #no{background:#eee;position:absolute}
 
-/* ===== IMAGES ===== */
-.photo-wrap{
-  position:relative;
-  width:100%;
-  margin-top:10px;
-}
-.photo-wrap img{
+/* images */
+.photo{
   width:100%;
   border-radius:14px;
 }
 
-/* ===== HEART ===== */
+/* ❤️ heart */
 #heart{
   position:absolute;
   top:58%;
@@ -85,7 +79,9 @@ button{
   transform:rotate(-45deg);
   cursor:pointer;
   transition:transform .6s ease;
+  z-index:2;
 }
+
 #heart::before,
 #heart::after{
   content:"";
@@ -94,23 +90,25 @@ button{
   height:40px;
   background:red;
   border-radius:50%;
+  z-index:1;
 }
 #heart::before{top:-20px;left:0}
 #heart::after{left:20px;top:0}
 
+/* 🔤 heart text FIXED */
 #heart span{
   position:absolute;
   top:11px;
   left:6px;
   transform:rotate(45deg);
-  color:#fff;
+  color:white;
   font-size:12px;
   font-weight:bold;
   z-index:5;
   pointer-events:none;
 }
 
-/* ===== FIREWORKS ===== */
+/* 💥 fireworks */
 .firework{
   position:fixed;
   width:8px;
@@ -129,7 +127,7 @@ button{
   }
 }
 
-/* ===== TEXT BEAT ===== */
+/* ❤️ beating text */
 .beat{
   animation:beat 1s infinite;
 }
@@ -142,9 +140,9 @@ button{
 
 <body>
 
-<!-- floating hearts -->
+<!-- 💗 floating hearts -->
 <script>
-for(let i=0;i<20;i++){
+for(let i=0;i<24;i++){
   let h=document.createElement("div");
   h.className="bg-heart";
   h.innerText="💗";
@@ -156,7 +154,7 @@ for(let i=0;i<20;i++){
 
 <!-- PAGE 1 -->
 <div class="card" id="p1">
-  <div style="font-size:50px">🐱</div>
+  <div style="font-size:48px">🐱</div>
   <h1>Tanisha, will you be my Valentine? 💖</h1>
   <button id="yes">Yes 💕</button>
   <button id="no">No</button>
@@ -165,34 +163,27 @@ for(let i=0;i<20;i++){
 <!-- PAGE 2 -->
 <div class="card hidden" id="p2">
   <h2>You chose love 💖</h2>
-  <div class="photo-wrap">
-    <img src="me.png">
+  <div style="position:relative">
+    <img src="me.png" class="photo">
     <div id="heart"><span>click</span></div>
   </div>
 </div>
 
 <!-- PAGE 3 -->
 <div class="card hidden" id="p3">
-  <img src="her.png" style="width:100%;border-radius:14px">
+  <img src="her.png" class="photo">
   <h2 class="beat">My Valentine, My Love 💖</h2>
 </div>
 
 <script>
-/* ===== PAGE 1 ===== */
-const yes=document.getElementById("yes");
-const no=document.getElementById("no");
 const p1=document.getElementById("p1");
 const p2=document.getElementById("p2");
 const p3=document.getElementById("p3");
+const no=document.getElementById("no");
 
-let noTexts=[
-  "No",
-  "Ahhh nooo 😅",
-  "Really sure?",
-  "This is awkward…",
-  "No option left 😌"
-];
-let n=0;
+/* ❌ no button logic */
+let texts=["No","Ahhh no 😅","Really?","Still no?","No option left 😌"];
+let i=0;
 
 function moveNo(){
   no.style.left=Math.random()*260+"px";
@@ -200,25 +191,27 @@ function moveNo(){
 }
 
 no.onclick=()=>{
-  if(n<noTexts.length){
-    no.innerText=noTexts[n++];
+  if(i<texts.length){
+    no.innerText=texts[i++];
     moveNo();
   }else{
     no.style.display="none";
   }
 };
 
-yes.onclick=()=>{
+/* ✅ yes */
+document.getElementById("yes").onclick=()=>{
   p1.classList.add("hidden");
   p2.classList.remove("hidden");
 };
 
-/* ===== HEART ===== */
+/* ❤️ heart */
 let clicks=0;
 const heart=document.getElementById("heart");
+
 heart.onclick=()=>{
   clicks++;
-  if(navigator.vibrate) navigator.vibrate(100);
+  if(navigator.vibrate) navigator.vibrate(120);
   heart.style.transform=`rotate(-45deg) scale(${1+clicks*0.7})`;
 
   if(clicks===1) heart.querySelector("span").innerText="click again";
@@ -234,9 +227,9 @@ heart.onclick=()=>{
   }
 };
 
-/* ===== FIREWORKS ===== */
+/* 💥 fireworks */
 function explode(){
-  for(let i=0;i<30;i++){
+  for(let j=0;j<30;j++){
     let f=document.createElement("div");
     f.className="firework";
     f.style.left="50%";
